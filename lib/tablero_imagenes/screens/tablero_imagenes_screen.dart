@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_insbook/home/models/book.dart';
+import 'package:flutter_insbook/books/book_model.dart';
 
 class TableroImagenesScreen extends StatelessWidget {
   final Book book;

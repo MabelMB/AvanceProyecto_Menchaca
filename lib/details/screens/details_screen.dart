@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_insbook/gestionMundo/screens/gestion_mundo_screen.dart';
 import 'package:flutter_insbook/gestionPersonajes/screens/gestion_personajes_screen.dart';
-import 'package:flutter_insbook/home/models/book.dart';
+import 'package:flutter_insbook/books/book_model.dart';
 import 'package:flutter_insbook/planeacion_book/screens/planeacion_book_screen.dart';
 import 'package:flutter_insbook/tablero_imagenes/screens/tablero_imagenes_screen.dart';
 

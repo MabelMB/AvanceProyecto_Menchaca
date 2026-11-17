@@ -1,10 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_insbook/auth/screens/login_screen.dart';
+import 'package:flutter_insbook/books/services/local_user_service.dart';
 import 'package:flutter_insbook/home/screens/home_screen.dart';
 
-class RegistroScreen extends StatelessWidget {
+class RegistroScreen extends StatefulWidget {
   const RegistroScreen({
     super.key,
   });
+
+  @override
+  State<RegistroScreen> createState() => _RegistroScreen();
+}
+
+class _RegistroScreen extends State<RegistroScreen>{
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  final LocalUserService _userService = LocalUserService();
+  bool _isLoading = false;
+
+  void registrarUsuario() async{
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if(username.isEmpty || password.isEmpty || confirmPassword.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Debes completar todos los campos"))
+    );
+    return;
+    }
+
+    if(password != confirmPassword){
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Las contraseñas no coinciden"))
+    );
+    return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    bool success = await _userService.registerUser(username, password);
+
+    if(!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+    
+    if(success){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Cuenta creada exitosamente"))
+      );
+      Navigator.pop(context);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Este nombre de usuario ya está registrado"),
+            backgroundColor: Colors.red)
+          );
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -76,6 +134,7 @@ class RegistroScreen extends StatelessWidget {
                         width: 380,
                         child: 
                         TextField(
+                          controller: _usernameController,
                           decoration: InputDecoration(
                             labelText: 'Usuario',
                             border: OutlineInputBorder(),
@@ -89,6 +148,8 @@ class RegistroScreen extends StatelessWidget {
                         width: 380,
                         child: 
                         TextField(
+                          obscureText: true,
+                          controller: _passwordController,
                           decoration: InputDecoration(
                             labelText: 'Contraseña',
                             border: OutlineInputBorder(),
@@ -102,6 +163,8 @@ class RegistroScreen extends StatelessWidget {
                         width: 380,
                         child: 
                         TextField(
+                          obscureText: true,
+                          controller: _confirmPasswordController,
                           decoration: InputDecoration(
                             labelText: 'Repetir contraseña',
                             border: OutlineInputBorder(),
@@ -112,14 +175,7 @@ class RegistroScreen extends StatelessWidget {
                       SizedBox(height: 50),
 
                       ElevatedButton(
-                        onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                //función para validar el usuario y contraseña
-                                builder: (context) => MyHomePage(),
-                              ),);
-                          }, 
+                        onPressed:  _isLoading ? null : registrarUsuario,
                           style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF12365c),
                           foregroundColor: Colors.white,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_insbook/login/screens/login_screen.dart';
+import 'package:flutter_insbook/auth/screens/auth_check_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Color(0xFF12365c)),
       ),
-      home: LoginScreen(),
+      home: const AuthCheckScreen(),
     );
   }
 }
